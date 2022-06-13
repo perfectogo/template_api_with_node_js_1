@@ -1,0 +1,23 @@
+{
+  "name": "api_njs_psql",
+  "version": "1.0.0",
+  "description": "template api with nodejs + postgresql",
+  "main": "index.js",
+  "scripts": {
+    "test": "node js run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perfectogo/template_api_with_node_js_1.git"
+  },
+  "keywords": [
+    "node",
+    "run"
+  ],
+  "author": "Jasurbek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/perfectogo/template_api_with_node_js_1/issues"
+  },
+  "homepage": "https://github.com/perfectogo/template_api_with_node_js_1#readme"
+}
