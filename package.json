@@ -19,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/perfectogo/template_api_with_node_js_1/issues"
   },
-  "homepage": "https://github.com/perfectogo/template_api_with_node_js_1#readme"
+  "homepage": "https://github.com/perfectogo/template_api_with_node_js_1#readme",
+  "dependencies": {
+    "http": "^0.0.1-security",
+    "path": "^0.12.7",
+    "pg": "^8.7.3",
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2"
+  }
 }
