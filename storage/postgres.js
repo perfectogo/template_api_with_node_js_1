@@ -11,13 +11,13 @@ storage = {
                             (
                                 todo_id,
                                 title,
-                                notes,
+                                note,
                                 priority
                             ) 
                     VALUES
                         ($1, $2, $3, $4)
                     RETURNING
-                        user_id`
+                        todo_id`
                 
                 try {
                     const id = await psql.query(
@@ -25,11 +25,12 @@ storage = {
                         [
                             v4(), 
                             newTodo.title,
-                            newTodo.notes,
+                            newTodo.note,
                             newTodo.priority
                         ]
                     )
-                    return await storage.pgstorage(psql).select(id.rows[0].user_id)
+
+                    return await storage.pgstorage(psql).select(id.rows[0].todo_id)
                 } catch (error) {
                     console.log('error while insert data from db', error)  
                     return error
@@ -37,39 +38,7 @@ storage = {
             },
             
             // Select All Data From Db
-            selectAll: async (filter) => {
-                filter.page = 1
-                filter.limit = 1
-                let offset = (filter.page - 1) * filter.limit
-
-                let query = `
-                    SELECT
-                        todo_id,
-                        title,
-                        notes,
-                        priority,
-                        created_at,
-                        updated_at,
-                        deleted_at
-                    FROM
-                        todos
-                    WHERE 
-                        deleted_at IS NULL
-                    OREDER BY
-                        priority
-                    LIMIT $1
-                    OFFSET $2`
-                try {
-                    return users = await psql.query(query, limit, offset).rows
-                } catch (error) {
-                    console.log('error while select all data from db')  
-                    return
-                }
-            },
-            
-            // Select Data By Id From Db By Id
-            select: async (id) => {
-                console.log(id)
+            selectAll: async () => {
                 let query = `
                     SELECT
                         todo_id,
@@ -82,10 +51,35 @@ storage = {
                     FROM
                         todos
                     WHERE 
+                        deleted_at IS NULL
+                    ORDER BY
+                        priority`
+                try {
+                    
+                    return  (await psql.query(query)).rows
+                } catch (error) {
+                    console.log('error while select all data from db')  
+                    return
+                }
+            },
+            
+            // Select Data By Id From Db By Id
+            select: async (id) => {
+                let query = `
+                    SELECT
+                        todo_id,
+                        title,
+                        note,
+                        priority,
+                        created_at,
+                        updated_at
+                    FROM
+                        todos
+                    WHERE 
                         todo_id=$1 AND 
                         deleted_at IS NULL`
                 try {
-                    return await psql.query(query, [id]).rows[0]
+                    return (await psql.query(query, [id])).rows[0]
                 } catch (error) {
                     console.log('error while select data from db', error)  
                     return error
@@ -103,10 +97,10 @@ storage = {
                             THEN title
                             ELSE COALESCE($2, title)
                             END,
-                    notes=CASE
+                    note=CASE
                             WHEN $3=''
-                            THEN notes
-                            ELSE COALESCE($3, notes)
+                            THEN note
+                            ELSE COALESCE($3, note)
                             END,
                     priority=CASE
                             WHEN $4=''
@@ -125,12 +119,12 @@ storage = {
                         [
                             data.id,
                             data.newData.title,
-                            data.newData.notes,
+                            data.newData.note,
                             data.newData.priority
                         
                         ]
                     )
-                    return await storage.pgstorage(psql).select(id.rows[0].user_id)
+                    return await storage.pgstorage(psql).select(id.rows[0].todo_id)
                 } catch (error) {
                     console.log('error while update data from db', error)  
                     return error

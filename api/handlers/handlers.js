@@ -18,11 +18,12 @@ handler = {
                     ctx.res.writeHead(201, {
                         'Content-Type':'application/json charset=utf8'
                     })
-
+                    const req = await getBodyData(ctx.req)
+                    const data = await storage.insert(JSON.parse(req))
                     const resp = {
                         statusCode: ctx.res.statusCode,
                         status: 'created',
-                        data: await storage.insert(JSON.parse(await getBodyData(ctx.req)))
+                        data
                     }
                     ctx.res.end(JSON.stringify(resp))
                 } catch (error) {
@@ -40,7 +41,7 @@ handler = {
                     const resp = {
                         statusCode: ctx.res.statusCode,
                         status: 'ok',
-                        data: await storage.selectAll({limit:1, page: 10})
+                        data: await storage.selectAll()
                     }
 
                     ctx.res.end(JSON.stringify(resp))
